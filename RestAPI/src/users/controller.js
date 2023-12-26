@@ -17,7 +17,23 @@ const getUserById = (req, res) => {
     })
 };
 
+const addUser = (req, res) => {
+    const { username, email } = req.body;
+    //Checking for unique, valid email
+    pool.query(queries.checkEmailExists, [email], (error, results) => {
+        if (results.rows.length) {
+            res.send("Email already exists.");
+        }
+        //If email doesn't exist then add user to db
+        pool.query(queries.addUser, [username, email], (error, results) => {
+            if(error) throw error;
+            res.status(201).send("User created successfully");
+        })
+    })
+}
+
 module.exports = {
     getUsers,
     getUserById,
+    addUser,
 };
