@@ -1,10 +1,9 @@
-//Where we'll store our tasks and user routes for the db
+//Where we'll store our tasks routes for the db
 
 const { Router } = require('express');
-const controller = require('./controller')
+const controller = require('../tasks/controller')
 
 const router = Router();
 
-router.get('/', controller.getUsers);
 
 module.exports = router;

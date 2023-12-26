@@ -1,6 +1,6 @@
 // Import dependencies
 const express = require("express");
-const dbRoutes = require('./src/tasks/routes');
+const userRoutes = require('./src/users/routes');
 
 // Create an express app
 const app = express();
@@ -14,7 +14,7 @@ app.get("/", (req, res) => {
     res.send("Hello World!")
 })
 
-app.use("/api/v1/tasks", dbRoutes);
+app.use("/api/v1/users", userRoutes);
 
 // Start our server
 app.listen(port, () => console.log(`app listening on port ${port}`));
