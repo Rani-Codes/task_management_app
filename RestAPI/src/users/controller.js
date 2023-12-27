@@ -32,8 +32,25 @@ const addUser = (req, res) => {
     })
 }
 
+const removeUser = (req, res) => {
+    const id = parseInt(req.params.id);
+
+    pool.query(queries.getUserById, [id], (error, results) => {
+        const noUserFound = !results.rows.length;
+        if(noUserFound){
+            res.send("User doesn't exist in the database");
+        }
+
+        pool.query(queries.removeUser, [id], (error, results) => {
+            if(error) throw error;
+            res.status(200).send("User removed successfully.");
+        })
+    })
+}
+
 module.exports = {
     getUsers,
     getUserById,
     addUser,
+    removeUser,
 };
