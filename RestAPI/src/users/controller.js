@@ -95,7 +95,6 @@ const updateUser = (req, res) => {
     });
 };
 
-
 module.exports = {
     getUsers,
     getUserById,
