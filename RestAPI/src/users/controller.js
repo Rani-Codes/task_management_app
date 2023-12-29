@@ -88,7 +88,6 @@ const updateUser = (req, res) => {
                 console.error('Error updating user:', error);
                 res.status(500).send("Error updating user");
             } else {
-                console.log('User updated successfully');
                 res.status(200).send("User updated successfully");
             }
         });
