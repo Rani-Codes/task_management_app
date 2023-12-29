@@ -48,23 +48,53 @@ const removeUser = (req, res) => {
     })
 }
 
+//NOTE: I had a hard time figuring out a way to update username or email while leaving the option to have
+// both be available to update as well. My solution was to check for the inputted values and update
+// the query according. This left me relying on the query in this controller file so you will find 
+// it moved to the method below.
 const updateUser = (req, res) => {
     const id = parseInt(req.params.id);
-    const { username } = req.body;
+    const { username, email } = req.body;
 
-    //Check to see if user exists
+    // Check to see if user exists
     pool.query(queries.getUserById, [id], (error, results) => {
         const noUserFound = !results.rows.length;
-        if(noUserFound){
-            res.send("User doesn't exist in the database");
+        if (noUserFound) {
+            res.status(404).send("User doesn't exist in the database");
         }
 
-        pool.query(queries.updateUser, [username, id], (error, results) => {
-            if(error) throw error;
-            res.status(200).send("User updated successfully");
-        })
-    })
-}
+        // Construct the parameters based on provided values
+        const updateParams = [];
+        let updateQuery = 'UPDATE users SET';
+
+        if (username !== undefined) {
+            updateQuery += ' username = $1';
+            updateParams.push(username);
+        }
+
+        if (email !== undefined) {
+            if (updateParams.length > 0) {
+                updateQuery += ',';
+            }
+            updateQuery += ' email = $' + (updateParams.length + 1);
+            updateParams.push(email);
+        }
+
+        updateQuery += ' WHERE id = $' + (updateParams.length + 1);
+        updateParams.push(id);
+
+        pool.query(updateQuery, updateParams, (error, results) => {
+            if (error) {
+                console.error('Error updating user:', error);
+                res.status(500).send("Error updating user");
+            } else {
+                console.log('User updated successfully');
+                res.status(200).send("User updated successfully");
+            }
+        });
+    });
+};
+
 
 module.exports = {
     getUsers,
