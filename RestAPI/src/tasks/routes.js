@@ -8,5 +8,6 @@ const router = Router();
 //We will have all routes for this router prepend with /api/users
 router.get('/', controller.getTasks);
 router.get('/:id', controller.getTaskById);
+router.post('/', controller.addTask);
 
 module.exports = router;
