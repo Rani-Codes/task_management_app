@@ -104,10 +104,28 @@ const updateTask = (req, res) => {
     });
 };
 
+const deleteTask = (req, res) => {
+    const id = parseInt(req.params.id);
+
+    // Check if task is in database and if it isn't then send a response
+    pool.query(queries.getTaskById, [id], (error, results) => {
+        const noTaskFound = !results.rows.length;
+        if(noTaskFound){
+            res.send("Task doesn't exist in the database");
+        }
+
+        pool.query(queries.deleteTask, [id], (error, results) => {
+            if(error) throw error;
+            res.status(200).send("Task removed successfully.");
+        })
+    })
+}
+
 
 module.exports = {
     getTasks,
     getTaskById,
     addTask,
     updateTask,
+    deleteTask
 }

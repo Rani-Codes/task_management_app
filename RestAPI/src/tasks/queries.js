@@ -6,10 +6,12 @@ const createTask = "INSERT INTO tasks (title, description, due_date, task_priori
 // Above is an example of a updateTask query that would be here. It has been moved to the
 // Controller file in this folder because I need it to be dynamic and having it in that file
 // is just easier for me to manipulate what the SQL query outputs.
+const deleteTask = "DELETE FROM tasks WHERE id = $1";
 
 
 module.exports = {
     getTasks,
     getTaskById,
     createTask,
+    deleteTask
 };
